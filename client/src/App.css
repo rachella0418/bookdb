@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Nanum+Myeongjo:wght@400;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Display:ital,wght@0,100..900;1,100..900&display=swap');
+
+:root {
+    --creamBeige: #F7F1E6;
+    --darkBrown: #261A19;
+    --chocoBrown: #6A3D2E;
+    --lightOrange: #D4946D;
+}
+.background {
+    height: 100vh;
+    width: 100%;
+    background-image: url('./images/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: var(--creamBeige);
+    overflow: hidden;
+    font-family: "Noto Sans Display", sans-serif;
+}
+
+.title {
+    display: flex;
+    align-items:flex-start; 
+    font-family: "DM Serif Display";
+}
+
+h1 {
+    text-align: center; 
+    padding: 20px 0 10px 0;
+    font-size: 60pt;
+    letter-spacing: 2px;
+    text-shadow: 0px 0px 10px var(--darkBrown);
+}
+
+h2 {
+    text-align: center; 
+    padding: 0px 0 10px 0;
+    font-size: 30pt;
+    color: var(--darkBrown);
+    font-family: "Noto Sans Display", sans-serif;
+}
+
+button {
+    font-family: "Noto Sans Display", sans-serif;
+    font-size: 18px;
+    font-weight: 500;
+    border-width: 0;
+    border-radius: 15px;
+    background-color: var(--creamBeige);
+}
+
+.addButtonBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    box-shadow: 0px 0px 5px 1px var(--chocoBrown);
+}
+
+.addButton {
+    padding: 10px 20px;
+    color: rgb(31, 23, 23);
+    background-color: var(--creamBeige);
+}
+
+button:hover {
+    color: var(--creamBeige); 
+    background-color: var(--darkBrown);
+    cursor:pointer;
+    box-shadow: 0px 0px 5px 1px var(--lightOrange);;
+}
+
+table {
+    border: 2px solid var(--chocoBrown);
+    border-radius: 10px;
+    background-color: var(--creamBeige);
+    width: 1200px;
+    height: 550px;
+    color: var(--darkBrown);
+    border-collapse: collapse;
+
+}
+
+th {
+    border-bottom: 2px solid var(--chocoBrown);
+    height: 50px;
+    border-right: 2px solid var(--chocoBrown);
+    background-color: var(--lightOrange);
+    font-size: 15pt;
+    color: var(--darkBrown);
+
+}
+
+td {
+    text-align: center;
+    border-right: 2px solid var(--chocoBrown);
+    font-size: 13pt;
+    color: var(--darkBrown);
+
+}
+
+tr:hover {
+    cursor: pointer;
+    background-color: rgba(183, 76, 0, 0.1);
+
+}
+
+.bookPopUpMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0, 0.4);
+}
+
+.popUpContent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background-color: var(--creamBeige);
+    height: 400px;
+    width: 450px;
+    box-shadow: 0px 0px 5px 2px var(--darkBrown);
+    border-radius: 20px;
+}
+
+.formDiv {
+    margin-bottom: 10px;
+}
+
+label {
+    color: var(--darkBrown);
+    font-size: 17px;
+    font-family: "Noto Sans Display", sans-serif;
+    margin-right: 10px;
+}
+
+input {
+    background-color: var(--creamBeige);
+    border: none;
+    border-bottom: 2px solid var(--darkBrown);
+    height: 20px;
+    font-family: "Noto Sans Display", sans-serif;
+    font-size: 17px;
+    color: var(--darkBrown);
+}
+
+#title {
+    width: 260px;
+}
+
+#copiesAvailable {
+    width: 80px;
+}
+
+input:disabled {
+    border: none;
+}
+
+input:focus {
+    outline-color: var(--darkBrown);
+    border: solid;
+    border-color: var(--darkBrown);
+}
+
+.formButtonsBox {
+    justify-items: left;
+    margin-top: 20px;
+}
+
+.formButtons {
+    margin-right: 10px;
+    padding: 5px 10px 5px 10px;
+    border: 2px solid var(--darkBrown);
+}
