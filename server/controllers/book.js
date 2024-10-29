@@ -24,9 +24,14 @@ export const getAllBooks = async (req, res) => {
 
 export const updateBook = async (req, res) => {
     try {
-        await Book.replaceOne(
-            {"isbn": req.body.modifiedBook.isbn},
-            req.body.modifiedBook
+        console.log(req.body.modifiedBook)
+        await Book.findByIdAndUpdate(req.body.modifiedBook._id, 
+            {
+                title: req.body.modifiedBook.title,
+                author: req.body.modifiedBook.author,
+                genre: req.body.modifiedBook.genre,
+                availableCopies: req.body.modifiedBook.availableCopies
+            }
         )
     } catch (err) {
         console.log(err);
@@ -36,9 +41,8 @@ export const updateBook = async (req, res) => {
 
 export const deleteBook = async (req, res) => {
     try {
-        await Book.deleteOne(
-            {"isbn": req.body.selectedBook.isbn}
-        )
+        console.log(req.body.selectedBook)
+        await Book.findByIdAndDelete(req.body.selectedBook._id)
     } catch (err) {
         console.log(err);
         res.status(500).json({error: err.message});

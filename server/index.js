@@ -5,7 +5,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import { getAllBooks, insertBook, updateBook, deleteBook } from "./controllers/book.js";
-
+import { insertMember } from "./controllers/member.js";
+import { insertBorrowedBook, getAllBorrowedBooks, returnBook } from "./controllers/borrowBook.js";
 /* CONFIGURATIONS */
 dotenv.config();
 const app = express();
@@ -20,6 +21,12 @@ app.post("/book/insertBook", insertBook)
 app.get("/book/getAllBooks", getAllBooks)
 app.post("/book/updateBook", updateBook)
 app.post("/book/deleteBook", deleteBook)
+
+app.post("/member/insertMember", insertMember)
+
+app.post("/borrowedBook/insertBook", insertBorrowedBook)
+app.get("/borrowedBook/getAllBooks", getAllBorrowedBooks)
+app.post("/borrowedBook/returnBook", returnBook)
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 8081;
