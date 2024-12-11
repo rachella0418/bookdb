@@ -16,6 +16,7 @@ function App() {
   const [editBookPopUp, setEditBookPopUp] = useState(false);
   const [filterByGenrePopUp, setFilterByGenrePopUp] = useState(false);
   const [filterByAuthorPopUp, setFilterByAuthorPopUp] = useState(false);
+  const [sortByISBNPopUp, setSortByISBNPopUp] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
 
   useEffect(() => {
@@ -76,13 +77,27 @@ function App() {
         {filterByGenrePopUp && <FilterByGenrePopUpMenu/>}
         <button className="featureButton" onClick={()=> setFilterByAuthorPopUp(!filterByAuthorPopUp)}>Author</button>
         {filterByAuthorPopUp && <FilterByAuthorPopUpMenu/>}
-        <h3 className="featureLabel">Sort By: </h3>
-        <button className="featureButton">ISBN</button>
-        <button className="featureButton">Available Copies</button>
+        
       </div>
       }
     </div>
   );
+
+  function SortByISBNPopUpMenu() {
+    
+
+    const onSubmit = (sortByISBN) => {
+      console.log(sortByISBN);  
+      axios.post(`http://localhost:8080/book/sortByISBN`, {
+        sortByISBN
+      })
+      .then((books) => {setFilteredBooks(books.data)})
+      .catch((err) => {
+        console.log("Error: ", err)
+      })
+      setSortByISBNPopUp(!sortByISBNPopUp);
+    };
+  }
 
   function FilterByAuthorPopUpMenu() {
     const {
