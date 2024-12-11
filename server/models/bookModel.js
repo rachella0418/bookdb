@@ -28,5 +28,9 @@ const bookSchema = new mongoose.Schema({
 }
 );
 
+// Indexes for filtering
+bookSchema.index({ genre: 1 });
+bookSchema.index({ author: 1 });
+
 const Book = mongoose.model("Book", bookSchema);
 export default Book;

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import morgan from "morgan";
-import { getAllBooks, insertBook, updateBook, deleteBook } from "./controllers/book.js";
+import { getAllBooks, insertBook, updateBook, deleteBook, filterByGenre, filterByAuthor } from "./controllers/book.js";
 import { insertMember } from "./controllers/member.js";
 import { insertBorrowedBook, getAllBorrowedBooks, returnBook } from "./controllers/borrowBook.js";
 /* CONFIGURATIONS */
@@ -21,6 +21,8 @@ app.post("/book/insertBook", insertBook)
 app.get("/book/getAllBooks", getAllBooks)
 app.post("/book/updateBook", updateBook)
 app.post("/book/deleteBook", deleteBook)
+app.post("/book/filterByGenre", filterByGenre)
+app.post("/book/filterByAuthor", filterByAuthor)
 
 app.post("/member/insertMember", insertMember)
 

@@ -7,6 +7,7 @@ function App() {
   const [books, setBooks] = useState([]);
   const [borrowedBooks, setBorrowedBooks] = useState([]);
   const [selectedBook, setSelectedBook] = useState({});
+  const [filteredBooks, setFilteredBooks] = useState(null);
   const [showBookTable, setShowBookTable] = useState(false);
   const [showBookBorrowedTable, setShowBookBorrowedTable] = useState(false);
   const [addBookPopUp, setAddBookPopUp] = useState(false);
@@ -14,12 +15,19 @@ function App() {
   const [borrowBookPopUp, setBorrowBookPopUp] = useState(false);
   const [editBookPopUp, setEditBookPopUp] = useState(false);
   const [filterByGenrePopUp, setFilterByGenrePopUp] = useState(false);
+  const [filterByAuthorPopUp, setFilterByAuthorPopUp] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
 
   useEffect(() => {
     fetchBooks();
     fetchBorrowedBooks();
   }, [refreshData])
+
+  useEffect(() => {
+    if (filteredBooks) {
+      setBooks(filteredBooks);
+    }
+  }, [filteredBooks])
 
   const fetchBooks = async () => {
     axios.get("http://localhost:8080/book/getAllBooks")
@@ -66,7 +74,8 @@ function App() {
         <h3 className="featureLabel">Filter By: </h3>
         <button className="featureButton" onClick={()=> setFilterByGenrePopUp(!filterByGenrePopUp)}>Genre</button>
         {filterByGenrePopUp && <FilterByGenrePopUpMenu/>}
-        <button className="featureButton">Author</button>
+        <button className="featureButton" onClick={()=> setFilterByAuthorPopUp(!filterByAuthorPopUp)}>Author</button>
+        {filterByAuthorPopUp && <FilterByAuthorPopUpMenu/>}
         <h3 className="featureLabel">Sort By: </h3>
         <button className="featureButton">ISBN</button>
         <button className="featureButton">Available Copies</button>
@@ -75,20 +84,88 @@ function App() {
     </div>
   );
 
-  function FilterByGenrePopUpMenu() {
+  function FilterByAuthorPopUpMenu() {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm();
+
+    const onSubmit = (filterByAuthor) => {
+      console.log(filterByAuthor);  
+      axios.post(`http://localhost:8080/book/filterByAuthor`, {
+        filterByAuthor
+      })
+      .then((books) => {setFilteredBooks(books.data)})
+      .catch((err) => {
+        console.log("Error: ", err)
+      })
+      setFilterByAuthorPopUp(!filterByAuthorPopUp);
+    };
+
     return (
       <div className="popUpMenu">
-        <div className="popUpContent">        
-            <label htmlFor="genre">Pick a genre:</label>
-            <select name="dog-names" id="dog-names">  
-              <option value="fantasy">Fantasy</option>
-              <option value="fiction">Fiction</option>
-              <option value="nonfiction">Nonfiction</option>
-              <option value="romance">Romance</option>
-              <option value="thriller">Thriller</option>
-              <option value="youngadult">Young Adult</option>
-            </select>
-            <button className="formButtons" type="submit">Filter</button>
+        <div className="popUpContent">  
+          <form onSubmit={handleSubmit(onSubmit)}> 
+            <h2>Enter an Author</h2>
+            <div className="formDiv">
+                <label htmlFor="author">Author:</label>
+                <input name="author" id="author" {...register('author')} />
+              </div>
+  
+            <div className="formButtonsBox">
+              <button className="formButtons" type="submit">Submit</button>
+              <button className="formButtons" onClick={() => setFilterByAuthorPopUp(!filterByAuthorPopUp)}>Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  function FilterByGenrePopUpMenu() {
+    const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm();
+  
+    const onSubmit = (filterByGenre) => {
+      console.log(filterByGenre);  
+      axios.post(`http://localhost:8080/book/filterByGenre`, {
+        filterByGenre
+      })
+      .then((books) => {setFilteredBooks(books.data)})
+      .catch((err) => {
+        console.log("Error: ", err)
+      })
+      setFilterByGenrePopUp(!filterByGenrePopUp);
+    };
+
+    return (
+      <div className="popUpMenu">
+        <div className="popUpContent">  
+          <form onSubmit={handleSubmit(onSubmit)}> 
+            <h2>Select a Genre</h2>
+            <div className="formDiv">
+                <label htmlFor="genre">Genre:</label>
+                <select name="genre" id="genre" {...register("genre")}>
+                  <option value="">--Select a Genre--</option>
+                  <option value="Fantasy">Fantasy</option>
+                  <option value="Science Fiction">Science Fiction</option>
+                  <option value="Mystery">Mystery</option>
+                  <option value="Romance">Romance</option>
+                  <option value="Non-Fiction">Non-Fiction</option>
+                  <option value="Horror">Horror</option>
+                  <option value="Thriller">Thriller</option>
+                </select>
+              </div>
+  
+            <div className="formButtonsBox">
+              <button className="formButtons" type="submit">Submit</button>
+              <button className="formButtons" onClick={() => setFilterByGenrePopUp(!filterByGenrePopUp)}>Cancel</button>
+            </div>
+          </form>
         </div>
       </div>
     );
@@ -140,6 +217,44 @@ function App() {
   }
 
   function BookTable() {
+    return (
+        <table>
+          <thead>
+            <tr>
+              <th>ISBN</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Genre</th>
+              <th>Available Copies</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              books.map(book => {
+                return (
+                <tr onClick={() => {
+                  setEditBookPopUp(!editBookPopUp);
+                  setSelectedBook(book);
+                }}>
+                  <td>{book._id}</td>
+                  <td>{book.title}</td>
+                  <td>{book.author}</td>
+                  <td>{book.genre}</td>
+                  <td>{book.availableCopies}</td>
+                </tr>
+              )
+                
+              })
+  
+            }
+            {editBookPopUp && <EditBookPopUpMenu />}
+  
+          </tbody>
+        </table> 
+    )
+  }
+
+  function BookFilteredTable() {
     return (
         <table>
           <thead>
@@ -352,7 +467,16 @@ function App() {
   
             <div className="formDiv">
               <label htmlFor="genre">Genre:</label>
-              <input id="genre" defaultValue={selectedBook.genre} onChange={handleChange} {...register('genre')} />
+              <select name="genre" id="genre" defaultValue={selectedBook.genre} onChange={handleChange}>
+                <option value="">--Select a Genre--</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Science Fiction">Science Fiction</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Non-Fiction">Non-Fiction</option>
+                <option value="Horror">Horror</option>
+                <option value="Thriller">Thriller</option>
+              </select>
             </div>
   
             <div className="formDiv"> 
@@ -417,10 +541,19 @@ function App() {
               <label htmlFor="author">Author:</label>
               <input name="author" id="author" {...register('author')} />
             </div>
-  
+
             <div className="formDiv">
               <label htmlFor="genre">Genre:</label>
-              <input name="genre" id="genre" {...register('genre')} />
+              <select name="genre" id="genre" {...register('genre')}>
+                <option value="">--Select a Genre--</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Science Fiction">Science Fiction</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Non-Fiction">Non-Fiction</option>
+                <option value="Horror">Horror</option>
+                <option value="Thriller">Thriller</option>
+              </select>
             </div>
   
             <div className="formDiv"> 
